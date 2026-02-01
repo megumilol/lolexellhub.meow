@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title><b>lolexell hub — Roblox Script</title>
+  <title>lolexell hub — Roblox Script</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="lolexell hub — Roblox script hub.">
   <style>
@@ -126,7 +126,7 @@
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
       transition: all 0.15s ease-out;
     }
     .copy-btn:hover {
@@ -135,6 +135,18 @@
     }
     .copy-btn:active {
       transform: translateY(0.5px) scale(0.98);
+    }
+    .spinner {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: 2px solid rgba(180, 190, 255, 0.3);
+      border-top-color: rgba(180, 190, 255, 1);
+      animation: spin 0.6s linear infinite;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
     .pill-row {
       display: flex;
@@ -244,7 +256,6 @@
       background: linear-gradient(90deg, #7f8fff, #02d2ff);
       opacity: 0.7;
     }
-    /* Keysystem button */
     .keys-button {
       margin-top: 10px;
       display: inline-flex;
@@ -262,6 +273,39 @@
     .keys-button:hover {
       background: rgba(40, 52, 110, 0.95);
     }
+
+    /* FULLSCREEN PAGE LOADER */
+    .page-loader {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, #111827, #020617 70%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 9999;
+      transition: opacity 0.4s ease-out, visibility 0.4s ease-out;
+    }
+    .page-loader-hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .page-loader-spinner {
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      border: 3px solid rgba(129, 140, 248, 0.3);
+      border-top-color: rgba(129, 140, 248, 1);
+      animation: spin 0.7s linear infinite;
+      margin-bottom: 10px;
+    }
+    .page-loader-text {
+      font-size: 13px;
+      color: #e5e7eb;
+      opacity: 0.9;
+    }
+
     @media (max-width: 640px) {
       .card {
         padding: 20px 16px 16px;
@@ -276,6 +320,12 @@
   </style>
 </head>
 <body>
+  <!-- PAGE LOADER -->
+  <div class="page-loader" id="pageLoader">
+    <div class="page-loader-spinner"></div>
+    <div class="page-loader-text">Loading lolexell hub…</div>
+  </div>
+
   <main class="card">
     <div class="badge">
       <span class="badge-dot"></span>
@@ -293,7 +343,9 @@
       <section>
         <div class="section-title">Loadstring</div>
         <div class="code-box">
-          <button class="copy-btn" id="copyBtn">Copy</button>
+          <button class="copy-btn" id="copyBtn">
+            <span id="copyLabel">Copy</span>
+          </button>
           <div class="code-label">Paste into your Roblox executor</div>
           <pre class="code" id="codeText">
 loadstring(game:HttpGet("https://raw.githubusercontent.com/megumilol/lolexellhub.meow/refs/heads/main/lolexellhublua.luau"))()</pre>
@@ -304,17 +356,14 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/megumilol/lolexellhub
           <span class="pill">Backdoor tools</span>
           <span class="pill">Popular games</span>
           <span class="pill">Fast UI</span>
-          <span class="pill">Doors</span>
-          <span class="pill">Free</span>
         </div>
 
         <ul class="feature-list">
           <li>One line to launch the entire hub.</li>
-          <li>Just launch and <b>BOOM<b> it worked!.</li>
-          <li>Works with most Roblox executors (Delta, Solara, Xeno, Seliware, etc.).</li>
+          <li>You can replace the link with your own GitHub / hosting script URL.</li>
+          <li>Works with most Roblox executors (Synapse, Delta, Solara, etc.).</li>
         </ul>
 
-        <!-- Keysystem button -->
         <a class="keys-button" href="https://link-center.net/3208921/QpV9zfKSX85P" target="_blank" rel="noopener noreferrer">
           Keysystem
         </a>
@@ -328,12 +377,13 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/megumilol/lolexellhub
 
         <div class="mini-label">Hotkeys (example)</div>
         <div class="hotkey-row">
-          <span class="key">L — Toggle show / hide</span>
+          <span class="key">RightShift — Open menu</span>
+          <span class="key">End — Toggle show / hide</span>
         </div>
 
-        <div class="mini-label">- Is it safe?</div>
+        <div class="mini-label">Script file</div>
         <p class="right-text">
-          Yes. That script is fully safe and using WindUI library. This script is free.
+          Create a file <b>lolexell.lua</b> on your hosting and put the GUI / hub code inside (the one started by the loadstring).
         </p>
       </aside>
     </div>
@@ -351,21 +401,52 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/megumilol/lolexellhub
   </main>
 
   <script>
+    // PAGE LOADER HIDE
+    const pageLoader = document.getElementById("pageLoader");
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        pageLoader.classList.add("page-loader-hidden");
+      }, 400); // чуть подержать лоадер
+    });
+
+    // COPY BUTTON WITH LOADING ANIMATION
     const btn = document.getElementById("copyBtn");
     const code = document.getElementById("codeText");
+    const copyLabel = document.getElementById("copyLabel");
 
     btn.addEventListener("click", () => {
       const text = code.textContent.trim();
+
+      btn.disabled = true;
+      btn.style.opacity = "0.8";
+      const oldLabel = copyLabel.textContent;
+      copyLabel.innerHTML = "";
+      const spinner = document.createElement("span");
+      spinner.className = "spinner";
+      copyLabel.appendChild(spinner);
+      const loadingText = document.createElement("span");
+      loadingText.textContent = " Loading…";
+      copyLabel.appendChild(loadingText);
+
       navigator.clipboard.writeText(text).then(() => {
-        const old = btn.textContent;
-        btn.textContent = "Copied!";
-        btn.style.borderColor = "rgba(114, 255, 173, 0.9)";
         setTimeout(() => {
-          btn.textContent = old;
-          btn.style.borderColor = "rgba(165, 175, 255, 0.5)";
-        }, 1300);
+          copyLabel.textContent = "Copied!";
+          btn.style.borderColor = "rgba(114, 255, 173, 0.9)";
+          btn.disabled = false;
+          btn.style.opacity = "1";
+          setTimeout(() => {
+            copyLabel.textContent = oldLabel;
+            btn.style.borderColor = "rgba(165, 175, 255, 0.5)";
+          }, 1200);
+        }, 500);
       }).catch(() => {
+        btn.disabled = false;
+        btn.style.opacity = "1";
+        copyLabel.textContent = "Copy failed";
         alert("Failed to copy. Please copy the highlighted text manually.");
+        setTimeout(() => {
+          copyLabel.textContent = oldLabel;
+        }, 1200);
       });
     });
   </script>
