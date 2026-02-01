@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>lolexell hub — Roblox Script</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="lolexell hub — Roblox скрипт-хаб.">
+  <meta name="description" content="lolexell hub — Roblox script hub.">
   <style>
     * {
       box-sizing: border-box;
@@ -244,6 +244,24 @@
       background: linear-gradient(90deg, #7f8fff, #02d2ff);
       opacity: 0.7;
     }
+    /* Keysystem button */
+    .keys-button {
+      margin-top: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(129, 138, 255, 0.6);
+      background: rgba(24, 32, 70, 0.9);
+      color: #e5e7ff;
+      font-size: 12px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .keys-button:hover {
+      background: rgba(40, 52, 110, 0.95);
+    }
     @media (max-width: 640px) {
       .card {
         padding: 20px 16px 16px;
@@ -268,17 +286,17 @@
       lolexell hub
     </h1>
     <p class="subtitle">
-      Вставь строку ниже в свой executor, чтобы загрузить lolexell hub. Работает как обычный Roblox скрипт‑хаб.
+      Paste the line below into your executor to load lolexell hub. Works like a regular Roblox script hub.
     </p>
 
     <div class="grid">
       <section>
         <div class="section-title">Loadstring</div>
         <div class="code-box">
-          <button class="copy-btn" id="copyBtn">Скопировать</button>
-          <div class="code-label">Вставь в Roblox executor</div>
+          <button class="copy-btn" id="copyBtn">Copy</button>
+          <div class="code-label">Paste into your Roblox executor</div>
           <pre class="code" id="codeText">
-loadstring(game:HttpGet("https://your-domain.xyz/lolexell.lua"))()</pre>
+loadstring(game:HttpGet("https://raw.githubusercontent.com/megumilol/lolexellhub.meow/refs/heads/main/lolexellhublua.luau"))()</pre>
         </div>
 
         <div class="pill-row">
@@ -289,27 +307,32 @@ loadstring(game:HttpGet("https://your-domain.xyz/lolexell.lua"))()</pre>
         </div>
 
         <ul class="feature-list">
-          <li>Одна строка, чтобы запустить весь hub.</li>
-          <li>Можно заменить ссылку на свой GitHub / хостинг со скриптом.</li>
-          <li>Подходит для большинства Roblox executors (Synapse, Delta, Solara и т.д.).</li>
+          <li>One line to launch the entire hub.</li>
+          <li>You can replace the link with your own GitHub / hosting script URL.</li>
+          <li>Works with most Roblox executors (Synapse, Delta, Solara, etc.).</li>
         </ul>
+
+        <!-- Keysystem button -->
+        <a class="keys-button" href="https://link-center.net/3208921/QpV9zfKSX85P" target="_blank" rel="noopener noreferrer">
+          Keysystem
+        </a>
       </section>
 
       <aside class="right-box">
-        <div class="right-title">Как использовать</div>
+        <div class="right-title">How to use</div>
         <p class="right-text">
-          1. Открой Roblox и свой executor. 2. Скопируй строку loadstring. 3. Вставь и запусти скрипт.
+          1. Open Roblox and your executor. 2. Copy the loadstring line. 3. Paste it and execute the script.
         </p>
 
-        <div class="mini-label">Hotkeys (пример)</div>
+        <div class="mini-label">Hotkeys (example)</div>
         <div class="hotkey-row">
-          <span class="key">RightShift — Открыть меню</span>
-          <span class="key">End — Скрыть/показать</span>
+          <span class="key">RightShift — Open menu</span>
+          <span class="key">End — Toggle show / hide</span>
         </div>
 
-        <div class="mini-label">Файл скрипта</div>
+        <div class="mini-label">Script file</div>
         <p class="right-text">
-          Создай файл <b>lolexell.lua</b> на своём хостинге и вставь туда код GUI/хаба (который запускается через loadstring).
+          Create a file <b>lolexell.lua</b> on your hosting and put the GUI / hub code inside (the one started by the loadstring).
         </p>
       </aside>
     </div>
@@ -317,7 +340,7 @@ loadstring(game:HttpGet("https://your-domain.xyz/lolexell.lua"))()</pre>
     <footer class="footer">
       <div>
         <span class="status-dot"></span>
-        Статус: Online • Last update: 2026
+        Status: Online • Last update: 2026
       </div>
       <div class="links">
         <a class="link" href="#">Docs</a>
@@ -334,14 +357,14 @@ loadstring(game:HttpGet("https://your-domain.xyz/lolexell.lua"))()</pre>
       const text = code.textContent.trim();
       navigator.clipboard.writeText(text).then(() => {
         const old = btn.textContent;
-        btn.textContent = "Скопировано!";
+        btn.textContent = "Copied!";
         btn.style.borderColor = "rgba(114, 255, 173, 0.9)";
         setTimeout(() => {
           btn.textContent = old;
           btn.style.borderColor = "rgba(165, 175, 255, 0.5)";
         }, 1300);
       }).catch(() => {
-        alert("Не удалось скопировать. Скопируй выделенный текст вручную.");
+        alert("Failed to copy. Please copy the highlighted text manually.");
       });
     });
   </script>
