@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>lolexell hub — Get Key</title>
@@ -78,6 +78,20 @@
       font-family: "JetBrains Mono", monospace;
       font-size: 12px;
     }
+    .copy-btn {
+      margin-top: 6px;
+      width: 100%;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(129, 140, 248, 0.8);
+      background: rgba(15, 23, 42, 0.95);
+      color: #e5e7eb;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .copy-btn:active {
+      transform: translateY(1px);
+    }
     .small {
       margin-top: 8px;
       font-size: 11px;
@@ -88,16 +102,16 @@
 <body>
   <main class="card">
     <h1>lolexell hub — Get Key</h1>
-    <p>Введи код, чтобы получить ключ для скрипта.</p>
+    <p>Enter the code to get and copy the key for the script.</p>
 
-    <label for="code">Код</label>
-    <input id="code" type="text" placeholder="введи xDMcmNFlolexellkey">
+    <label for="code">Code</label>
+    <input id="code" type="text" placeholder="enter xDMcmNFlolexellkey">
 
-    <button id="getKeyBtn">Получить ключ</button>
+    <button id="getKeyBtn">Get key</button>
 
     <div class="result" id="result"></div>
     <div class="small">
-      Скопируй ключ и вставь его в окно скрипта.
+      After you get it, click “Copy key” and paste it into the script window.
     </div>
   </main>
 
@@ -114,11 +128,24 @@
 
       if (value === SECRET_CODE) {
         result.innerHTML = `
-          Твой ключ:
-          <div class="key">${KEY_VALUE}</div>
+          Your key:
+          <div class="key" id="keyText">${KEY_VALUE}</div>
+          <button class="copy-btn" id="copyBtn">Copy key</button>
         `;
+
+        const copyBtn = document.getElementById("copyBtn");
+        const keyText = document.getElementById("keyText");
+
+        copyBtn.addEventListener("click", () => {
+          const text = keyText.textContent.trim();
+          navigator.clipboard.writeText(text).then(() => {
+            copyBtn.textContent = "Copied!";
+          }).catch(() => {
+            copyBtn.textContent = "Copy error";
+          });
+        });
       } else {
-        result.textContent = "Неверный код. Попробуй ещё раз.";
+        result.textContent = "Wrong code. Try again.";
       }
     });
   </script>
