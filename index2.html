@@ -87,49 +87,38 @@
 </head>
 <body>
   <main class="card">
-    <h1>lolexell hub — Key</h1>
-    <p>Вставь сюда свой HWID, чтобы получить ключ для скрипта.</p>
+    <h1>lolexell hub — Get Key</h1>
+    <p>Введи код, чтобы получить ключ для скрипта.</p>
 
-    <label for="hwid">HWID</label>
-    <input id="hwid" type="text" placeholder="вставь HWID из скрипта">
+    <label for="code">Код</label>
+    <input id="code" type="text" placeholder="введи xDMcmNFlolexellkey">
 
-    <button id="getKeyBtn">Get Key</button>
+    <button id="getKeyBtn">Получить ключ</button>
 
     <div class="result" id="result"></div>
     <div class="small">
-      Ключ привязан к HWID и действует ограниченное время.
+      Скопируй ключ и вставь его в окно скрипта.
     </div>
   </main>
 
   <script>
     const btn = document.getElementById("getKeyBtn");
-    const hwidInput = document.getElementById("hwid");
+    const codeInput = document.getElementById("code");
     const result = document.getElementById("result");
 
-    btn.addEventListener("click", async () => {
-      const hwid = hwidInput.value.trim();
-      if (!hwid) {
-        result.textContent = "Сначала введи HWID.";
-        return;
-      }
+    const SECRET_CODE = "xDMcmNFlolexellkey";
+    const KEY_VALUE = "XMsdnCNjd2Dlolexellget";
 
-      result.textContent = "Запрос к серверу...";
+    btn.addEventListener("click", () => {
+      const value = codeInput.value.trim();
 
-      try {
-        const res = await fetch(`/api/getkey?hwid=${encodeURIComponent(hwid)}`);
-        const data = await res.json();
-
-        if (!data.success) {
-          result.textContent = "Ошибка: " + (data.error || "unknown");
-          return;
-        }
-
+      if (value === SECRET_CODE) {
         result.innerHTML = `
-          Твой ключ:<div class="key">${data.key}</div>
-          <div class="small">Expires in: ${Math.floor(data.expires_in / 60)} min</div>
+          Твой ключ:
+          <div class="key">${KEY_VALUE}</div>
         `;
-      } catch (e) {
-        result.textContent = "Ошибка запроса. Попробуй позже.";
+      } else {
+        result.textContent = "Неверный код. Попробуй ещё раз.";
       }
     });
   </script>
