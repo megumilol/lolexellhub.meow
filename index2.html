@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>lolexell hub — Get Key</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, sans-serif;
+      background: radial-gradient(circle at top, #1e1b4b, #020617 55%, #000 100%);
+      color: #e5e7eb;
+    }
+    .card {
+      background: rgba(15, 23, 42, 0.96);
+      border-radius: 16px;
+      padding: 24px 20px 18px;
+      width: 100%;
+      max-width: 420px;
+      border: 1px solid rgba(129, 140, 248, 0.6);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+    }
+    h1 {
+      font-size: 22px;
+      margin: 0 0 6px;
+    }
+    p {
+      font-size: 13px;
+      margin: 0 0 14px;
+      color: #9ca3af;
+    }
+    label {
+      font-size: 13px;
+      display: block;
+      margin-bottom: 4px;
+      color: #e5e7eb;
+    }
+    input {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(75, 85, 99, 0.9);
+      background: #020617;
+      color: #f9fafb;
+      font-size: 13px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 10px;
+      width: 100%;
+      padding: 9px 10px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(90deg, #ef4444, #3b82f6);
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button:active {
+      transform: translateY(1px);
+    }
+    .result {
+      margin-top: 12px;
+      font-size: 13px;
+      word-break: break-all;
+    }
+    .key {
+      margin-top: 4px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: #020617;
+      border: 1px solid rgba(129, 140, 248, 0.8);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+    }
+    .small {
+      margin-top: 8px;
+      font-size: 11px;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>lolexell hub — Key</h1>
+    <p>Вставь сюда свой HWID, чтобы получить ключ для скрипта.</p>
+
+    <label for="hwid">HWID</label>
+    <input id="hwid" type="text" placeholder="вставь HWID из скрипта">
+
+    <button id="getKeyBtn">Get Key</button>
+
+    <div class="result" id="result"></div>
+    <div class="small">
+      Ключ привязан к HWID и действует ограниченное время.
+    </div>
+  </main>
+
+  <script>
+    const btn = document.getElementById("getKeyBtn");
+    const hwidInput = document.getElementById("hwid");
+    const result = document.getElementById("result");
+
+    btn.addEventListener("click", async () => {
+      const hwid = hwidInput.value.trim();
+      if (!hwid) {
+        result.textContent = "Сначала введи HWID.";
+        return;
+      }
+
+      result.textContent = "Запрос к серверу...";
+
+      try {
+        const res = await fetch(`/api/getkey?hwid=${encodeURIComponent(hwid)}`);
+        const data = await res.json();
+
+        if (!data.success) {
+          result.textContent = "Ошибка: " + (data.error || "unknown");
+          return;
+        }
+
+        result.innerHTML = `
+          Твой ключ:<div class="key">${data.key}</div>
+          <div class="small">Expires in: ${Math.floor(data.expires_in / 60)} min</div>
+        `;
+      } catch (e) {
+        result.textContent = "Ошибка запроса. Попробуй позже.";
+      }
+    });
+  </script>
+</body>
+</html>
